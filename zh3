@@ -1,0 +1,37 @@
+ELSŐ
+
+use sample_mflix
+
+Filter: {languages.0: "English", awards.win: 2}
+
+Project: {_id: 0, countries: 0, genres: 0, poster: 0, lastupdated: 0, languages: 0, released: 0, awards: 0, imdb: 0, type: 0, tomatoes: 0, num_mflix_comments: 0}
+
+Sort: {year: -1}
+-----------------------------------------------------
+MÁSODIK
+
+use sample_mflix
+
+ sample_mflix> db.users.aggregate([{$group:{name, email: {$in: "$.com"}}}])
+--------------------------------------------------
+HARMADIK
+
+use sample_mflix
+
+sample_mflix> db.movies.aggregate([{$in:{rated, $avg: runtime}}{year $gt 1950}{$group:{rated}}}])
+-----------------------------------------------
+NEGYEDIK
+
+MATCH (m:Movie)
+WITH m.title AS 'CÍM', m.name AS 'NÉV'
+WHERE m.released>1970 OR m.title CONTAINS "Love"
+RETURN m.title, m.name
+ORDER BY m.title
+--------------------------------------------------
+ÖTÖDIK
+
+MATCH (p:Person)-[:DIRECTED]->(m:Movie)
+WITH p.name AS 'Director' AND COUNT(*) AS 'NumMoviesDirected'
+RETURN Director, NumMoviesDirected
+ORDER BY NumMoviesDirected
+LIMIT 5
